@@ -1,0 +1,73 @@
+*{
+    margin: 0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+.avatar{
+    width: 90px;
+    height: 120px;
+    margin: 30px;
+}
+.header>div{
+    display: inline-block;
+}
+.header{
+    position: relative;
+}
+.service{
+    top: 0px;
+    height: 200px;
+    position: absolute;
+    width: 500px;
+}
+.me{
+    margin-left:20px;
+}
+.service h1{
+    padding-top:130px;
+    padding-left: 40px;
+}
+.content{
+    margin-top: 40px;
+    margin-left:30px;
+}
+.menu h4{
+    margin-bottom:15px;
+}
+.content>div{
+    display:inline-block;
+}
+.content{
+    position: relative;
+    margin-bottom: 200px;
+}
+.detail{
+    position: absolute;
+    top:0px;
+    width:1200px;
+    height:350px;
+    margin-left: 75px;
+}
+.firstline>div{
+    display: inline-block;
+    width:33%;
+}
+.secondline>div{
+    display: inline-block;
+    width:33%;
+}
+.firstline{
+    margin-top: 10px;
+}
+.inside img,.inside h4{
+    margin-bottom: 15px;
+}
+.inside h4{
+    font-size: 25px;
+}
+.firstline{
+    margin-bottom: 30px;
+}
+img{
+    background-color: purple;
+}
