@@ -2,14 +2,6 @@
     margin:0px;
     padding:0px;
 }
-.firstline button{
-    background-color: aqua;
-}
-h4{
-    text-align: center;
-    margin-top: 100px;
-    font-size: 40px;
-}
 .header{
     background: rgb(193, 204, 164);
     height: 50px;
@@ -26,10 +18,6 @@ a:hover{
     background-color: coral;
     height: 44px;
 }
-.firstline .no{
-    margin-right: 440px;
-    margin-left: 340px;
-}
-.firstline{
-    margin-bottom: 30px;
+#text{
+    width:500px;
 }
