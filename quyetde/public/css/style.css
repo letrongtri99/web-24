@@ -33,3 +33,7 @@ a:hover{
 .firstline{
     margin-bottom: 30px;
 }
+.secondline .result{
+    margin-left: 450px;
+    margin-right: 200px;
+}
