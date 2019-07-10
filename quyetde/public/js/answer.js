@@ -40,7 +40,23 @@ window.onload=()=>{
             if(data.success){
                 console.log(data);
                 document.getElementById("id01").innerText=data.questioncontent;
-            }
+                const button = document.getElementById('yes');
+                button.addEventListener('click',()=>{
+                    window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                    fetch(`/true`,{
+                        method:'POST',
+                        headers:{
+                            'Content-Type':'application/json',
+                        },
+                        body: JSON.stringify({
+                            Id: data.id,
+                            like: ++data.like,
+                        }),
+                    });
+                });
+
+                }
+            
             else{
                 window.alert(data.message);
                 console.log(data);
