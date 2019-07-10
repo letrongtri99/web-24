@@ -66,7 +66,7 @@ window.onload = () =>{
                         window.alert(data.message);
                     }
                 })
-                .catch((errosr) =>{
+                .catch((error) =>{
                     console.log(error);
                     window.alert(error.message);
                 });

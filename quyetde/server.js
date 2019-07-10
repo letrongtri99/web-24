@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-
+var pass;
 app.use(express.static('public'));
 app.use(bodyParser.json());
 // 
@@ -57,7 +57,49 @@ app.post(`/create-question`,(req,res) =>{
             });
             app.get(`/create-question/${newQuestionId}`,(req,res)=>{
                 res.sendFile(path.resolve(__dirname,'./public/html/indexresult.html'));
-            })
+            });
+        }
+    });
+});
+app.get(`/randomquestion`,(req,res) =>{
+    fs.readFile('./data.json',{encoding:'utf8'},(error,data)=>{
+        if(error){
+            res.json({
+                success:false,
+                message:error.message,
+            });
+        }
+        else{
+            const questionList = JSON.parse(data);
+            var i = Math.floor(Math.random() * questionList.length);
+            res.json({
+                success:true,
+                questioncontent: questionList[i].questioncontent,
+                id:questionList[i].id,
+            });
+        }
+    });
+});
+app.post(`/resultquestion`,(req,res)=>{
+    pass = req.body.Id;
+    fs.readFile('./data.json',{encoding:'utf8'},(error,data)=>{
+        if(error){
+            res.json({
+                success:false,
+                message:error.message,
+            });
+        }
+        else{
+            const questionList = JSON.parse(data);
+            for(var i=0;i<questionList.length;i++){
+                if(questionList[i].id == pass){
+                    res.json({
+                        success:true,
+                        questioncontent: questionList[i].questioncontent,
+                        like:questionList[i].like,
+                    });
+                }
+            }
         }
     });
 });
