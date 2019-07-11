@@ -83,6 +83,10 @@ window.onload=()=>{
                         }
                     })
                 });
+                const next = document.getElementById("result");
+                next.onclick=()=>{
+                    window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                }
             }
             
             else{
@@ -93,4 +97,8 @@ window.onload=()=>{
         .catch((error)=>{
             window.alert(error.message);
         })
+    const other = document.getElementById("other");
+    other.onclick=()=>{
+        window.location.reload();
+    }
 }

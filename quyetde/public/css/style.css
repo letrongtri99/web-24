@@ -34,12 +34,11 @@ a:hover{
     color: white;
 }
 .firstline{
-    margin-bottom: 30px;
+    margin-bottom: 80px;
     margin-top:40px;
 }
-.secondline .result{
-    margin-left: 450px;
-    margin-right: 200px;
+.secondline #result{
+    margin-left: 590px;
 }
 #yes{
     font-size: 20px;
@@ -48,4 +47,15 @@ a:hover{
     border-radius: 7px;
     padding: 5px;
     color: white;
+}
+.secondline>button{
+    font-size:15px;
+    padding:5px;
+    border: 2px solid black;
+    border-radius:7px;
+}
+.dap{
+    height: 44px;
+    margin-right: 0px;
+    background-color: darkgoldenrod;
 }
