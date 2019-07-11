@@ -10,10 +10,14 @@
 <body>
     <div class="header">
         <a href="http://localhost:3000/me" >Hỏi nhanh</a>
-        <a href="http://localhost:3000/chinh" target="_self">Đáp gọn</a>
+        <a class="response" href="http://localhost:3000/chinh" target="_self">Đáp gọn</a>
     </div>
     <div id='question'></div>
-    <div id='vote'></div>
+    <div class="show">
+        <div id='vote'></div>
+        <div id='dis'></div>
+    </div>
+    <button id="another">Xem câu hỏi khác</button>
     <script language= 'javascript' src="../js/question.js"></script>
 </body>
 </html>

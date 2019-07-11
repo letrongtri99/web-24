@@ -77,6 +77,7 @@ app.get(`/randomquestion`,(req,res) =>{
                 questioncontent: questionList[i].questioncontent,
                 id:questionList[i].id,
                 like:questionList[i].like,
+                dislike:questionList[i].dislike,
             });
         }
     });
@@ -98,6 +99,7 @@ app.post(`/resultquestion`,(req,res)=>{
                         success:true,
                         questioncontent: questionList[i].questioncontent,
                         like:questionList[i].like,
+                        dislike:questionList[i].dislike,
                     });
                 }
             }
@@ -117,6 +119,38 @@ app.post(`/true`,(req,res)=>{
             for(var i=0;i<questionList.length;i++){
                 if(questionList[i].id == req.body.Id){
                     questionList[i].like = req.body.like;
+                }
+            }
+            fs.writeFile('./data.json',JSON.stringify(questionList),(error)=>{
+                if(error){
+                    res.status(501).json({
+                        success: false,
+                        message: error.message,
+                    }); 
+                }
+                else{
+                    res.json({
+                        success: true,
+                        id:req.body.Id,
+                    });
+                }
+            });
+        }
+    });
+});
+app.post(`/false`,(req,res)=>{
+    fs.readFile('./data.json',{encoding:'utf8'},(error,data)=>{
+        if(error){
+            res.json({
+                success:false,
+                message:error.message,
+            });
+        }
+        else{
+            const questionList = JSON.parse(data);
+            for(var i=0;i<questionList.length;i++){
+                if(questionList[i].id == req.body.Id){
+                    questionList[i].dislike = req.body.dislike;   
                 }
             }
             fs.writeFile('./data.json',JSON.stringify(questionList),(error)=>{

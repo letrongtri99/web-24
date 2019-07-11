@@ -2,9 +2,6 @@
     margin:0px;
     padding:0px;
 }
-.firstline button{
-    background-color: aqua;
-}
 h4{
     text-align: center;
     margin-top: 100px;
@@ -26,14 +23,29 @@ a:hover{
     background-color: coral;
     height: 44px;
 }
-.firstline .no{
+.firstline #no{
     margin-right: 440px;
     margin-left: 340px;
+    font-size: 20px;
+    background-color: red;
+    border:2px solid black;
+    border-radius: 7px;
+    padding: 5px;
+    color: white;
 }
 .firstline{
     margin-bottom: 30px;
+    margin-top:40px;
 }
 .secondline .result{
     margin-left: 450px;
     margin-right: 200px;
+}
+#yes{
+    font-size: 20px;
+    background-color: blue;
+    border:2px solid black;
+    border-radius: 7px;
+    padding: 5px;
+    color: white;
 }

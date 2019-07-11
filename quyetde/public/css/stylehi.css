@@ -1,6 +1,7 @@
 *{
     margin:0px;
     padding:0px;
+    box-sizing: content-box;
 }
 .header{
     background: rgb(193, 204, 164);
@@ -9,18 +10,36 @@
 .header a{
     text-decoration: none;
     display: inline-block;
-    margin-top: 0px;
+    margin: 0px;
     padding-top:5px;
     padding-left: 20px;
     width: 100px;
 }
+.answer{
+    height: 44px;
+    margin-right: 0px;
+    background-color: darkgoldenrod;
+}
 a:hover{
     background-color: coral;
     height: 44px;
+    margin:0px;
 }
 #text{
     width:500px;
 }
 #send{
     font-size: 15px;
+    margin-left:50px;
+}
+.line{
+    margin-top:20px;
+    margin-left: 50px;
+    font-size: 30px;
+}
+#text{
+    width:950px;
+}
+#input-container{
+    margin-left: 50px;
 }

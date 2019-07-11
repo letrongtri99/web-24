@@ -51,6 +51,11 @@ window.onload= ()=>{
         .then((data)=>{
             console.log(data);
             document.getElementById("question").innerText = data.questioncontent;
-            document.getElementById("vote").innerText = data.like;
-        })
+            document.getElementById("vote").innerText = data.like+" like";
+            document.getElementById("dis").innerText = data.dislike+" dislike";
+        });
+    const change = document.getElementById("another");
+    change.addEventListener('click',()=>{
+        window.location.assign(`http://localhost:3000/chinh`);
+    });
 }

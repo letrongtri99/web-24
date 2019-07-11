@@ -40,9 +40,9 @@ window.onload=()=>{
             if(data.success){
                 console.log(data);
                 document.getElementById("id01").innerText=data.questioncontent;
-                const button = document.getElementById('yes');
-                button.addEventListener('click',()=>{
-                    window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                const button1 = document.getElementById('yes');
+                button1.addEventListener('click',()=>{
+                    // window.location.assign(`http://localhost:3000/create-question/${data.id}`);
                     fetch(`/true`,{
                         method:'POST',
                         headers:{
@@ -52,10 +52,38 @@ window.onload=()=>{
                             Id: data.id,
                             like: ++data.like,
                         }),
-                    });
+                    })
+                    .then((response)=>{
+                        return response.json();
+                    })
+                    .then((data2)=>{
+                        if(data2.success){
+                            window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                        }
+                    })
                 });
-
-                }
+                const button2 = document.getElementById("no");
+                button2.addEventListener('click',()=>{
+                    fetch(`/false`,{
+                        method:'POST',
+                        headers:{
+                            'Content-Type':'application/json',
+                        },
+                        body: JSON.stringify({
+                            Id: data.id,
+                            dislike: ++data.dislike,
+                        }),
+                    })
+                    .then((responser)=>{
+                        return responser.json();
+                    })
+                    .then((data3)=>{
+                        if(data3.success){
+                            window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                        }
+                    })
+                });
+            }
             
             else{
                 window.alert(data.message);
