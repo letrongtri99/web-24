@@ -61,7 +61,7 @@ window.onload = () =>{
                     if(data.success){
                         //window.location
                         console.log(data);
-                        window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                        window.location.assign(`http://localhost:3000/create/${data.id}`);
                     }else{
                         window.alert(data.message);
                     }

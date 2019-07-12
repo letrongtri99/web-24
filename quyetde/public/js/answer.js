@@ -32,60 +32,19 @@ window.onload=()=>{
     //     .catch((error)=>{
     //         console.log(error);
     //     }); 
-    fetch(`/randomquestion`)
+    var selectedQuestion;
+    fetch(`/get-random-question`)
         .then((res)=>{
             return res.json();
         })
         .then((data)=>{
             if(data.success){
                 console.log(data);
-                document.getElementById("id01").innerText=data.questioncontent;
-                const button1 = document.getElementById('yes');
-                button1.addEventListener('click',()=>{
-                    // window.location.assign(`http://localhost:3000/create-question/${data.id}`);
-                    fetch(`/true`,{
-                        method:'POST',
-                        headers:{
-                            'Content-Type':'application/json',
-                        },
-                        body: JSON.stringify({
-                            Id: data.id,
-                            like: ++data.like,
-                        }),
-                    })
-                    .then((response)=>{
-                        return response.json();
-                    })
-                    .then((data2)=>{
-                        if(data2.success){
-                            window.location.assign(`http://localhost:3000/create-question/${data.id}`);
-                        }
-                    })
-                });
-                const button2 = document.getElementById("no");
-                button2.addEventListener('click',()=>{
-                    fetch(`/false`,{
-                        method:'POST',
-                        headers:{
-                            'Content-Type':'application/json',
-                        },
-                        body: JSON.stringify({
-                            Id: data.id,
-                            dislike: ++data.dislike,
-                        }),
-                    })
-                    .then((responser)=>{
-                        return responser.json();
-                    })
-                    .then((data3)=>{
-                        if(data3.success){
-                            window.location.assign(`http://localhost:3000/create-question/${data.id}`);
-                        }
-                    })
-                });
+                selectedQuestion = data.data;
+                document.getElementById("id01").innerText=data.data.questioncontent;
                 const next = document.getElementById("result");
                 next.onclick=()=>{
-                    window.location.assign(`http://localhost:3000/create-question/${data.id}`);
+                    window.location.assign(`http://localhost:3000/create/${data.data.id}`);
                 }
             }
             
@@ -101,4 +60,30 @@ window.onload=()=>{
     other.onclick=()=>{
         window.location.reload();
     }
+    const voteQuestion =(Vote)=>{
+        fetch(`/vote`,{
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json',
+            },
+            body:JSON.stringify({
+                id: selectedQuestion.id,
+                vote: Vote,
+            }),
+        })
+            .then((res)=>{
+                window.location.assign(`http://localhost:3000/create/${selectedQuestion.id}`)
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+    };
+    const button1 = document.getElementById('yes');
+    button1.addEventListener('click',()=>{
+        voteQuestion('like');
+    });
+    const button2 = document.getElementById("no");
+    button2.addEventListener('click',()=>{
+        voteQuestion('dislike');
+    });
 }

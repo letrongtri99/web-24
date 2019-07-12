@@ -1,6 +1,7 @@
 window.onload= ()=>{
     const url = window.location.pathname;
     const id = url.substring(url.lastIndexOf('/') + 1);
+    console.log(id);
     // var xmlhttp = new XMLHttpRequest();
     // var Url = `http://localhost:3000/json`
 
@@ -36,26 +37,55 @@ window.onload= ()=>{
     // .catch((error)=>{
     //     console.log(error);
     // });
-    fetch(`/resultquestion`,{
-        method:'POST',
+    // fetch(`/resultquestion`,{
+    //     method:'POST',
+    //     headers:{
+    //         'Content-Type':'application/json',
+    //     },
+    //     body:JSON.stringify({
+    //         Id:id,
+    //     }),
+    // })
+    //     .then((res)=>{
+    //         return res.json();
+    //     })
+    //     .then((data)=>{
+    //         console.log(data);
+    //         document.getElementById("question").innerText = data.questioncontent;
+    //         document.getElementById("vote").innerText = data.like+" like";
+    //         document.getElementById("dis").innerText = data.dislike+" dislike";
+    //     });
+    const change = document.getElementById("another");
+    change.addEventListener('click',()=>{
+        window.location.assign(`http://localhost:3000/chinh`);
+    });
+    fetch(`/getquestion/${id}`,{
+        method:'GET',
         headers:{
             'Content-Type':'application/json',
         },
-        body:JSON.stringify({
-            Id:id,
-        }),
     })
         .then((res)=>{
             return res.json();
         })
         .then((data)=>{
             console.log(data);
-            document.getElementById("question").innerText = data.questioncontent;
-            document.getElementById("vote").innerText = data.like+" like";
-            document.getElementById("dis").innerText = data.dislike+" dislike";
+            if(data.data){
+                document.getElementById("question").innerText = data.data.questionContent;
+                document.getElementById("vote").innerText = data.data.like+" like";
+                document.getElementById("dis").innerText = data.data.dislike+" dislike";
+                let likePercent = 0;
+                let dislikePercent = 0;
+                if(likePercent ===0 && dislikePercent ===0){
+                    likePercent=50;
+                    dislikePercent=50;
+                }else{
+                    likePercent = (data.data.like/(data.data.dislike+data.data.like)).toFixed(2);
+                    dislikePercent = 100 - Number(likePercent);
+                }
+            }
+            else{
+                window.alert('Question not found');
+            }
         });
-    const change = document.getElementById("another");
-    change.addEventListener('click',()=>{
-        window.location.assign(`http://localhost:3000/chinh`);
-    });
 }
