@@ -40,11 +40,11 @@ window.onload=()=>{
         .then((data)=>{
             if(data.success){
                 console.log(data);
-                selectedQuestion = data.data;
-                document.getElementById("id01").innerText=data.data.questioncontent;
+                selectedQuestion = data.data[0];
+                document.getElementById("id01").innerText=data.data[0].questionContent;
                 const next = document.getElementById("result");
                 next.onclick=()=>{
-                    window.location.assign(`http://localhost:3000/create/${data.data.id}`);
+                    window.location.assign(`http://localhost:3000/create/${data.data[0]._id}`);
                 }
             }
             
@@ -67,12 +67,12 @@ window.onload=()=>{
                 'Content-Type':'application/json',
             },
             body:JSON.stringify({
-                id: selectedQuestion.id,
+                id: selectedQuestion._id,
                 vote: Vote,
             }),
         })
             .then((res)=>{
-                window.location.assign(`http://localhost:3000/create/${selectedQuestion.id}`)
+                window.location.assign(`http://localhost:3000/create/${selectedQuestion._id}`);
             })
             .catch((error)=>{
                 console.log(error);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link type="text/css" rel="stylesheet" href="../css/stylehi.css" />
+    <link type="text/css" rel="stylesheet" href="../css/styletimkiem.css"/>
 </head>
 <body>
     <div class="header">
@@ -13,12 +13,12 @@
         <a href="http://localhost:3000/chinh" target="_self">Đáp gọn</a>
         <a class="find" href="http://localhost:3000/timkiem" target="self" >Tìm kiếm câu hỏi</a>
     </div>
-    <h2 class="line">Hãy hỏi cộng đồng một câu hỏi đúng/sai hoặc có/không</h2>
+    <h2 class="line">Hãy nhập câu hỏi cần tìm</h2>
     <div id="input-container">
         <textarea rows="8" id="text" maxlength="200"></textarea><br>
-        <div id="display">200/200 kí tự còn lại</div>
     </div>
-    <button id="send">Gửi câu hỏi</button>
-    <script language="javascript" src="../js/main.js"></script>
+    <button id="send">Tìm kiếm</button>
+    <div id="resultfind"></div>
+    <script language="javascript" src="../js/find.js" ></script>          
 </body>
 </html>
