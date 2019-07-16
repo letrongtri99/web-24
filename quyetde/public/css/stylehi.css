@@ -20,11 +20,7 @@
     margin-right: 0px;
     background-color: darkgoldenrod;
 }
-a:hover{
-    background-color: coral;
-    height: 44px;
-    margin:0px;
-}
+
 #text{
     width:500px;
 }

@@ -172,6 +172,23 @@ mongoose.connect(`mongodb://localhost:27017/quyetde`,
                                         });
                                     }
                                 });
+                                // questionModel.aggregate([
+                                //     {$sample:{size:1}},
+                                // ]).exec((error,data)=>{
+                                //     if(error){
+                                //         res.status(500).json({
+                                //             success:false,
+                                //             message: error.message,
+                                //         });
+                                //     }
+                                //     else{
+                                //         res.json({
+                                //             success:true,
+                                //             ...data._doc,
+                                //             data:data,   
+                                //         });
+                                //     }
+                                // });
                             });
                             app.put('/vote',(req,res)=>{
                                 // fs.readFile('./data.json',{encoding:'utf8'},(error,data)=>{
@@ -218,10 +235,11 @@ mongoose.connect(`mongodb://localhost:27017/quyetde`,
                                             });
                                         }
                                     });
+                                    // questionModel.findByIdAndUpdate(req.body.id,{$inc:{[req.body.vote]:1}},(error)=>{});
                                 });
                             });
                             app.get(`/getfind/:needfind`,(req,res)=>{
-                                questionModel.find({questionContent:{"$regex":String(req.params.needfind).toLowerCase()}},(error,data)=>{
+                                questionModel.find({questionContent:{"$regex":req.params.needfind,$options:'i'}},(error,data)=>{
                                     if(error){
                                         res.json({
                                             success:false,

@@ -76,13 +76,22 @@ window.onload= ()=>{
                 document.getElementById("dis").innerText = data.data.dislike+" dislike";
                 let likePercent = 0;
                 let dislikePercent = 0;
-                if(likePercent ===0 && dislikePercent ===0){
+                if(data.data.like ===0 && data.data.dislike ===0){
                     likePercent=50;
                     dislikePercent=50;
+
                 }else{
-                    likePercent = (data.data.like/(data.data.dislike+data.data.like)).toFixed(2);
+                    likePercent = ((data.data.like)/(data.data.dislike+data.data.like)).toFixed(2)*100;
                     dislikePercent = 100 - Number(likePercent);
                 }
+                console.log(likePercent);
+                console.log(dislikePercent);
+                document.getElementsByClassName("progress-bar bg-info")[0].style.width =likePercent.toPrecision(4)+"%";
+                document.getElementsByClassName("progress-bar bg-info")[0].innerHTML=likePercent.toPrecision(4)+"%";
+                document.getElementsByClassName("progress-bar bg-info")[0].insertAdjacentHTML('beforeend','<i class="far fa-thumbs-up"></i>');
+                document.getElementsByClassName("progress-bar bg-warning")[0].style.width =dislikePercent.toPrecision(4)+"%";
+                document.getElementsByClassName("progress-bar bg-warning")[0].innerHTML=dislikePercent.toPrecision(4)+"%";
+                document.getElementsByClassName("progress-bar bg-warning")[0].insertAdjacentHTML('beforeend','<i class="far fa-thumbs-down"></i>');
             }
             else{
                 window.alert('Question not found');
