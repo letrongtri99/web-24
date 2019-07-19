@@ -1,0 +1,12 @@
+.row{
+  margin-bottom: 0dp;
+}
+.head{
+  height: 300px;
+}
+.title{
+  color: red;
+}
+a:hover{
+  text-decoration: none;
+}
