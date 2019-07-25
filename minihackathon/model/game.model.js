@@ -11,7 +11,8 @@ const GameSchema = new mongoose.Schema({
     times:{
         type:Number,
         default: 2,
-    }
+    },
+    score:[],
 });
 const gameModel = mongoose.model('Game',GameSchema);
 module.exports = gameModel;

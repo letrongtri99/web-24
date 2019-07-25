@@ -62,6 +62,17 @@ mongoose.connect(`mongodb://localhost:27017/minihackathon`,
                             })
                         });
                     });
+                    app.put(`/savescore`,(req,res)=>{
+                        gameModel.findById(req.body.Id,(error,data)=>{
+                            data.score= req.body.Score;
+                            data.save((error,data2)=>{
+                                
+                            })
+                        });
+                    });
+                    app.get(`/data`,(req,res)=>{
+                        res.sendFile(path.resolve(__dirname,'./danhsach.json'));
+                    });
                     app.listen(8080);
                 }
 },);
