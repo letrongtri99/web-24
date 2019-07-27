@@ -44,10 +44,10 @@ window.onload = () => {
             `
             <tr>
                 <th scope="row">Round ${timeEach}</th>
-                <td><input class="${timeEach}" type="text"/></td>
-                <td><input class="${timeEach}" type="text"/></td>
-                <td><input class="${timeEach}" type="text"/></td>
-                <td><input class="${timeEach}" type="text"/></td>
+                <td><input class="${timeEach}" type="text" value="0"/></td>
+                <td><input class="${timeEach}" type="text" value="0"/></td>
+                <td><input class="${timeEach}" type="text" value="0"/></td>
+                <td><input class="${timeEach}" type="text" value="0"/></td>
             </tr>
             `
         );
