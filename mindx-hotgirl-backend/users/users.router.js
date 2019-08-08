@@ -4,12 +4,7 @@ const userRouter = express.Router();
 const bcryptjs = require('bcryptjs');
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 //gui request phai cong cả 2 phan
-userRouter.get(`/test`, (req, res) => {
-    console.log('Current User: ', req.session.currentUser);
-    res.json({
-        success: true,
-    });
-});
+
 userRouter.post(`/register`, (req, res) => {
     //get email+ pw+ fullName from req.body
     const { email, passWord, fullName } = req.body;
@@ -98,10 +93,16 @@ userRouter.post(`/login`, (req, res) => {
                     email: data.email,
                     fullName: data.fullName,
                 }
-                res.status(200).json({
-                    success: true,
-                    message: "Login success"
+                req.session.save((error) => {
+                    res.json({
+                        success: true,
+                    })
                 })
+                // res.status(200).json({
+                //     success: true,
+                //     message: "Login success"
+                // })
+                // res.redirect(`/profile`);
             }
             else {
                 res.status(400).json({
@@ -115,6 +116,30 @@ userRouter.post(`/login`, (req, res) => {
 
     //save info to session
 });
+userRouter.get(`/profile`, (req, res) => {
+    // if(req.session.currentUser){
+    //     return res.json({
+    //         currentUser: req.session.currentUser
+    //     })
+    // }
+    // else{
+    //     return res.json({
+    //         currentUser: 'Chưa đăng nhập'
+    //     })
+    // }
+    req.session.save((error) => {
+        if (req.session.currentUser) {
+            res.json({
+                currentUser: req.session.currentUser
+            })
+        }
+        else {
+            res.json({
+                currentUser: 'Chưa đăng nhập'
+            })
+        }
+    })
+});
 userRouter.get(`/logout`, (req, res) => {
     req.session.destroy((error) => {
         if (error) {
@@ -123,10 +148,10 @@ userRouter.get(`/logout`, (req, res) => {
                 message: error.message
             })
         }
-        else{
+        else {
             res.status(200).json({
-                success:true,
-                message:'Logout success'
+                success: true,
+                message: 'Logout success'
             });
         }
     })
