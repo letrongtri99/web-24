@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const userModel = require('./users/users.model');
 const userRouter = require('./users/users.router');
+const postRouter = require('./posts/posts.router');
 const session = require('express-session');
+const cors = require('cors');
 mongoose.connect('mongodb://localhost:27017/techkid-hotgirl', (error) => {
     if (error) {
         throw error;
@@ -12,32 +14,19 @@ mongoose.connect('mongodb://localhost:27017/techkid-hotgirl', (error) => {
         console.log('Success rồi');
         const app = express();
         //routers
-        app.use(function (req, res, next) {
-
-            // Website you wish to allow to connect
-            res.setHeader('Access-Control-Allow-Origin', '*');
-
-            // Request methods you wish to allow
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-            // Request headers you wish to allow
-            res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,Accept');
-
-            // Set to true if you need the website to include cookies in the requests sent
-            // to the API (e.g. in case you use sessions)
-            res.setHeader('Access-Control-Allow-Credentials', true);
-
-            // Pass to next layer of middleware
-            next();
-        });
+        app.use(cors({
+            origin:'http://localhost:3000',
+            credentials:true
+        }));
         app.use(bodyParser.json());
         app.use(session({
             secret: 'keyboard cat',
             resave:false,
-            saveUninitialized:true,
+            saveUninitialized:false,
             cookie:{maxAge: 1000*60*60*24}
         }));
         app.use('/users', userRouter);
+        app.use('/posts',postRouter);
         //use middleware
 
         app.listen(3001);

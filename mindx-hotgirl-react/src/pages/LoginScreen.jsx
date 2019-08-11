@@ -47,6 +47,7 @@ class LoginScreen extends React.Component {
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    credentials:'include',
                     body: JSON.stringify({
                         email: email,
                         passWord: passWord
@@ -61,21 +62,12 @@ class LoginScreen extends React.Component {
                         }
                         else {
                             document.getElementById("warning").innerText = " ";
+                            //save current to localStorage
+                            window.localStorage.setItem('email',data.data.email);
+                            window.localStorage.setItem('fullName',data.data.fullName);
                             window.location.assign("http://localhost:3000/profile");
                         }
                     });
-                // fetch(`http://localhost:3001/users/test`, {
-                //     method: 'GET',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                // })
-                //     .then((res) => {
-                //         return res.json();
-                //     })
-                //     .then((data) => {
-                //         console.log(data.currentUser);
-                //     });
             }
         });
     }
