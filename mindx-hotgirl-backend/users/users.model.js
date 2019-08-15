@@ -20,6 +20,14 @@ const UserSchema = mongoose.Schema({
     createdAt:{
         type:Date,
         default: new Date(),
+    },
+    addRess:{
+        type:String,
+        default:'',
+    },
+    avatar:{
+        type:String,
+        default:''
     }
 });
 const userModel = mongoose.model('Users',UserSchema);

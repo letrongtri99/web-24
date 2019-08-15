@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const userModel = require('./users/users.model');
 const userRouter = require('./users/users.router');
 const postRouter = require('./posts/posts.router');
+const uploadRouter = require('./uploads/uploads.router');
 const session = require('express-session');
 const cors = require('cors');
 mongoose.connect('mongodb://localhost:27017/techkid-hotgirl', (error) => {
@@ -25,8 +26,10 @@ mongoose.connect('mongodb://localhost:27017/techkid-hotgirl', (error) => {
             saveUninitialized:false,
             cookie:{maxAge: 1000*60*60*24}
         }));
+        app.use(express.static('public'));
         app.use('/users', userRouter);
         app.use('/posts',postRouter);
+        app.use('/uploads',uploadRouter);
         //use middleware
 
         app.listen(3001);

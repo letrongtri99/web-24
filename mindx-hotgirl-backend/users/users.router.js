@@ -144,4 +144,25 @@ userRouter.get(`/logout`, (req, res) => {
         }
     })
 })
+userRouter.put(`/update`,(req,res)=>{
+    userModel.findById(req.body.id,(error,data)=>{
+        data.avatar = req.body.imageUrl;
+        data.addRess = req.body.address;
+        data.fullName = req.body.fullname;
+        data.save((error,data2)=>{
+            if (error) {
+                res.status(500).json({
+                    success: false,
+                    message: error.message
+                })
+            }
+            else {
+                res.status(200).json({
+                    success: true,
+                    message: 'Update success'
+                });
+            }
+        })
+    })
+})
 module.exports = userRouter;

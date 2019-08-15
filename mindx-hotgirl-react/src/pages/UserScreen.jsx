@@ -140,6 +140,8 @@ class UserScreen extends React.Component {
                     <input type="text" className="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="mail"></input>
                 </div>
                 <button id="logout">Log out</button><br></br>
+                <a className="btn btn-outline-primary" href="/create-post">New Post</a>
+                <a className="btn btn-outline-primary" href="/uploadprofile">Upload Profile</a>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Create Information</button>
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
