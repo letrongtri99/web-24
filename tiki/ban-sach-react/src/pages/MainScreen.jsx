@@ -28,15 +28,15 @@ class MainScreen extends React.Component {
                 <nav>
                     <ul class="bang">
                         <li><a href="http://localhost:3000"> TRANG CHỦ</a></li>
-                        <li><a href="gioithieu.html">GIỚI THIỆU</a></li>
-                        <li><a href="tintuc.html">TIN SÁCH</a>
+                        <li><a href="http://localhost:3000/gioithieu">GIỚI THIỆU</a></li>
+                        <li><a href="#" >TIN SÁCH</a>
                             <ul>
-                                <li><a href="lamdep.html">TRONG NƯỚC</a></li>
-                                <li><a href="trangda.html">NƯỚC NGOÀI</a></li>
+                                <li><a href="http://localhost:3000/tinsachtrongnuoc">TRONG NƯỚC</a></li>
+                                <li><a href="http://localhost:3000/tinsachnuocngoai">NƯỚC NGOÀI</a></li>
                             </ul>
                         </li>
-                        <li><a href="huongdan.html">HƯỚNG DẪN MUA HÀNG</a></li>
-                        <li><a href="lienhe.html">LIÊN HỆ</a></li>
+                        <li><a href="http://localhost:3000/huongdan">HƯỚNG DẪN MUA HÀNG</a></li>
+                        <li><a href="http://localhost:3000/lienhe">LIÊN HỆ</a></li>
                     </ul>
                 </nav>
                 <aside>
@@ -45,14 +45,13 @@ class MainScreen extends React.Component {
                         <img src="image/logotop.png" />
                         <div align="justify">
                             <ul style={{ listStyleType: "none" }}>
-                                <li><a href="trinam.html">Văn Học</a></li>
-                                <li><a href="chongne.html">Kinh Tế</a></li>
-                                <li><a href="duongda.html">Tâm Lý-Kỹ Năng Sống</a></li>
-                                <li><a href="matna.html">Nuôi Dạy Con</a></li>
-                                <li><a href="laohoa.html">Sách Thiếu Nhi</a></li>
-                                <li><a href="tamtrang.html">Tiểu Sử-Hồi Kí</a></li>
-                                <li><a href="taylong.html">Giáo Khoa- Tham Khảo</a></li>
-                                <li><a href="nuochoa.html">Sách ngoại ngữ</a></li>
+                                <li><a href="http://localhost:3000/vanhoc">Văn Học</a></li>
+                                <li><a href="http://localhost:3000/kinhte">Kinh Tế</a></li>
+                                <li><a href="http://localhost:3000/tamly">Tâm Lý-Kỹ Năng Sống</a></li>
+                                <li><a href="http://localhost:3000/nuoiday">Nuôi Dạy Con</a></li>
+                                <li><a href="http://localhost:3000/sachthieunhi">Sách Thiếu Nhi</a></li>
+                                <li><a href="http://localhost:3000/tieusu">Tiểu Sử-Hồi Kí</a></li>
+                                <li><a href="http://localhost:3000/sachngoaingu">Sách ngoại ngữ</a></li>
                             </ul>
                         </div>
                     </div>

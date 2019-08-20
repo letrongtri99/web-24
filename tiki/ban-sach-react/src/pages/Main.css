@@ -55,6 +55,7 @@ nav ul ul a{
 	padding: 5px;}  	
 nav > ul > li:hover>ul{
 	display:block;
+	z-index: 2;
 }	
 nav ul ul a:hover{
 	color:#FF0;
@@ -118,6 +119,7 @@ article{
 	float:left;
 	border:1px solid #333;
 	margin:0px 3px;
+	height:380px;
 }
 .flash{
 	margin-top:18px;
@@ -178,3 +180,16 @@ footer p{
 	font-size:24px;
 	border-radius:10px;
 }
+th {
+	padding: 10px;
+}
+
+td a {
+	text-decoration: none;
+}
+
+td a:hover {
+	text-decoration: underline;
+	color: #F00;
+}
+pre { white-space: pre-wrap; }

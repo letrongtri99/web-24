@@ -1,5 +1,4 @@
 import React from 'react';
-
 class UploadProfile extends React.Component {
     state = {
         imageFile: undefined,
