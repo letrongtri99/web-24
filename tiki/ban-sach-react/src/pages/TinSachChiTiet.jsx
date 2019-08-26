@@ -2,12 +2,65 @@ import React from 'react'
 import './Main.css'
 class TinSachChiTiet extends React.Component {
     state = {
-        data: {}
+        data: {},
+        fullName: '',
+        role: ''
+    }
+    handleLogOut = (event) => {
+        if (this.state.role === 'users') {
+            fetch('http://localhost:3001/users/logout', {
+                method: 'GET',
+                credentials: 'include',
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    // clear window.localStorage
+                    window.localStorage.removeItem('role');
+                    window.localStorage.removeItem('fullName');
+                    window.localStorage.removeItem('email');
+                    window.sessionStorage.removeItem('role');
+                    window.sessionStorage.removeItem('fullName');
+                    window.sessionStorage.removeItem('email');
+                    // clear fullname + email in state
+                    this.setState({
+                        currentUser: {
+                            fullName: '',
+                            role: ''
+                        },
+                    });
+                })
+        }
+        else if (this.state.role === 'admin') {
+            fetch('http://localhost:3001/admin/logout', {
+                method: 'GET',
+                credentials: 'include',
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    // clear window.localStorage
+                    window.localStorage.removeItem('role');
+                    window.localStorage.removeItem('fullName');
+                    window.localStorage.removeItem('email');
+                    window.sessionStorage.removeItem('role');
+                    window.sessionStorage.removeItem('fullName');
+                    window.sessionStorage.removeItem('email');
+                    // clear fullname + email in state
+                    this.setState({
+                        currentUser: {
+                            fullName: '',
+                            role: ''
+                        },
+                    });
+                })
+        }
     }
     componentDidMount() {
         const url = window.location.pathname;
         const id = url.substring(url.lastIndexOf('/') + 1);
-        console.log(id);
         fetch(`http://localhost:3001/news/findDetail/${id}`, {
             method: 'GET',
             credentials: 'include',
@@ -23,6 +76,21 @@ class TinSachChiTiet extends React.Component {
                     data: data.data
                 })
             })
+
+        const fullName = window.localStorage.getItem('fullName');
+        const role = window.localStorage.getItem('role');
+        if (fullName && role) {
+            this.setState({
+                fullName: fullName,
+                role: role
+            })
+        }
+        else{
+            this.setState({
+                fullName: window.sessionStorage.getItem('fullName'),
+                role: window.sessionStorage.getItem('role')
+            })
+        }
     }
     render() {
         console.log(this.state.data);
@@ -30,8 +98,18 @@ class TinSachChiTiet extends React.Component {
             <div id="menu">
                 <header>
                     <div className="login">
-                        <a >Đăng Kí</a>
-                        <a >Đăng Nhập</a>
+                        {
+                            this.state.fullName ? (<div>
+                                <a href="" style={{ marginRight: "2px" }}>Chào Mừng {this.state.fullName}</a>
+                                <a style={{ marginRight: "2px" }}>Vai Trò: {this.state.role}</a>
+                                <a href="" style={{ marginRight: "2px" }} onClick={this.handleLogOut}>Đăng Xuất</a>
+                                <a href="http://localhost:3000/dangky">Đăng Kí</a>
+                            </div>
+                            )
+                                :
+                                (<div><a style={{ marginRight: "5px" }} href="http://localhost:3000/dangky">Đăng Kí</a>
+                                    <a href="http://localhost:3000/dangnhap">Đăng Nhập</a></div>)
+                        }
                     </div>
                     <img src='http://giasuttv.net/wp-content/uploads/2014/10/nhung-cuon-sach-hay-nen-doc.jpg' alt=" " width="972px" height="250px" />
                 </header>
@@ -47,7 +125,9 @@ class TinSachChiTiet extends React.Component {
                             </ul>
                         </li>
                         <li><a href="http://localhost:3000/huongdan">HƯỚNG DẪN MUA HÀNG</a></li>
-                        <li><a href="http://localhost:3000/lienhe">LIÊN HỆ</a></li>
+                        {this.state.role === 'users'? <li><a href="http://localhost:3000/lienhe">LIÊN HỆ</a></li>:null}
+                        {this.state.role === 'admin'? <li><a href="http://localhost:3000/danghang">ĐĂNG HÀNG</a></li>:null}
+                        {this.state.role ? <li><a href="http://localhost:3000/giohang">GIỎ HÀNG</a></li> : null }
                     </ul>
                 </nav>
                 <aside>

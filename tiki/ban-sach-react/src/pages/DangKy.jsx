@@ -1,14 +1,15 @@
-import React from 'react'
-import './Main.css'
-import './GioiThieu.css'
-class SanPhamChiTiet extends React.Component {
+import React from 'react';
+import './Main.css';
+import './GioiThieu.css';
+class DangKy extends React.Component {
     state = {
-        data: {},
-        price: 0,
         fullName: '',
-        role: '',
         email: '',
-        amount:0
+        passWord: '',
+        role: 'Người Mua',
+        repeatPass: '',
+        full: '',
+        roles: ''
     }
     handleLogOut = (event) => {
         if (this.state.role === 'users') {
@@ -30,8 +31,8 @@ class SanPhamChiTiet extends React.Component {
                     // clear fullname + email in state
                     this.setState({
                         currentUser: {
-                            fullName: '',
-                            role: ''
+                            full: '',
+                            roles: ''
                         },
                     });
                 })
@@ -55,77 +56,59 @@ class SanPhamChiTiet extends React.Component {
                     // clear fullname + email in state
                     this.setState({
                         currentUser: {
-                            fullName: '',
-                            role: ''
+                            full: '',
+                            roles: ''
                         },
                     });
                 })
         }
     }
-    formatMoney(amount, decimalCount = 3, decimal = ".", thousands = ".") {
-        try {
-            decimalCount = Math.abs(decimalCount);
-            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
-            const negativeSign = amount < 0 ? "-" : "";
-
-            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
-            let j = (i.length > 3) ? i.length % 3 : 0;
-
-            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
-        } catch (e) {
-            console.log(e)
-        }
-    };
-    handlePrice = (event) => {
-        const num = Number(event.target.value);
-        const price = this.formatMoney(this.state.data.deductprice * num);
-        this.setState({
-            price: price,
-            amount:event.target.value
-        })
-    }
     componentDidMount() {
-        const url = window.location.pathname;
-        const id = url.substring(url.lastIndexOf('/') + 1);
-        fetch(`http://localhost:3001/products/findDetail/${id}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                this.setState({
-                    data: data.data
-                })
-            })
-
         const fullName = window.localStorage.getItem('fullName');
         const role = window.localStorage.getItem('role');
-        const email = window.localStorage.getItem('email');
         if (fullName && role) {
             this.setState({
-                fullName: fullName,
-                role: role,
-                email: email
+                full: fullName,
+                roles: role
             })
         }
         else{
             this.setState({
-                fullName: window.sessionStorage.getItem('fullName'),
-                role: window.sessionStorage.getItem('role'),
-                email: window.sessionStorage.getItem('email')
+                full: window.sessionStorage.getItem('fullName'),
+                roles: window.sessionStorage.getItem('role')
             })
         }
     }
-    handleBuy = (event) => {
-        var i = window.confirm('Ban Có Chắc Chắn Muốn Đặt Hàng?');
-        if (i) {
-            fetch(`http://localhost:3001/buy/create`, {
+    handleOption = (event) => {
+        this.setState({
+            role: event.target.value
+        })
+    }
+    handleEmail = (event) => {
+        this.setState({
+            email: event.target.value
+        })
+    }
+    handleFullName = (event) => {
+        this.setState({
+            fullName: event.target.value
+        })
+    }
+    handlePassword = (event) => {
+        this.setState({
+            passWord: event.target.value
+        })
+    }
+    handleRepeat = (event) => {
+        this.setState({
+            repeatPass: event.target.value
+        })
+    }
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log(this.state.role);
+        if (this.state.role === 'Người Mua') {
+            fetch(`http://localhost:3001/users/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -133,10 +116,32 @@ class SanPhamChiTiet extends React.Component {
                 credentials: 'include',
                 body: JSON.stringify({
                     email: this.state.email,
-                    title: this.state.data.title,
-                    price: this.state.price,
-                    amount: this.state.amount,
-                    imageUrl: this.state.data.imageUrl,
+                    passWord: this.state.passWord,
+                    fullName: this.state.fullName
+                }),
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data.success) {
+                        document.getElementById("resultHelp").innerText = "Register success";
+                    }
+                    else {
+                        document.getElementById("resultHelp").innerText = data.message;
+                    }
+                });
+        }
+        else if (this.state.role === 'Người Bán') {
+            fetch(`http://localhost:3001/admin/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email: this.state.email,
+                    passWord: this.state.passWord,
                     fullName: this.state.fullName
                 })
             })
@@ -144,31 +149,31 @@ class SanPhamChiTiet extends React.Component {
                     return res.json();
                 })
                 .then((data) => {
-                    if(data.success){
-                        window.alert('Đặt Hàng Thành Công');
+                    if (data.success) {
+                        document.getElementById("resultHelp").innerText = "Register success";
                     }
-                    else{
-                        window.alert('Đặt Hàng Thất Bại');
+                    else {
+                        document.getElementById("resultHelp").innerText = data.message;
                     }
-                })
+                });
         }
     }
+
     render() {
-        console.log(this.state.price);
         return (
             <div id="menu">
                 <header>
                     <div className="login">
                         {
-                            this.state.fullName ? (<div>
-                                <a href="" style={{ marginRight: "2px" }}>Chào Mừng {this.state.fullName}</a>
+                            this.state.full ? (<div>
+                                <a href="" style={{marginRight:"2px"}}>Chào Mừng {this.state.full}</a>
                                 <a style={{ marginRight: "2px" }}>Vai Trò: {this.state.role}</a>
-                                <a href="" style={{ marginRight: "2px" }} onClick={this.handleLogOut}>Đăng Xuất</a>
+                                <a href="" style={{marginRight:"2px"}} onClick={this.handleLogOut}>Đăng Xuất</a>
                                 <a href="http://localhost:3000/dangky">Đăng Kí</a>
                             </div>
                             )
                                 :
-                                (<div><a style={{ marginRight: "5px" }} href="http://localhost:3000/dangky">Đăng Kí</a>
+                                (<div><a style={{marginRight:"5px"}} href="http://localhost:3000/dangky">Đăng Kí</a>
                                     <a href="http://localhost:3000/dangnhap">Đăng Nhập</a></div>)
                         }
                     </div>
@@ -187,14 +192,14 @@ class SanPhamChiTiet extends React.Component {
                         </li>
                         <li><a href="http://localhost:3000/huongdan">HƯỚNG DẪN MUA HÀNG</a></li>
                         {this.state.role === 'users'? <li><a href="http://localhost:3000/lienhe">LIÊN HỆ</a></li>:null}
-                        {this.state.role === 'admin' ? <li><a href="http://localhost:3000/danghang">ĐĂNG HÀNG</a></li> : null}
+                        {this.state.roles === 'admin'? <li><a href="http://localhost:3000/danghang">ĐĂNG HÀNG</a></li>:null}
                         {this.state.role ? <li><a href="http://localhost:3000/giohang">GIỎ HÀNG</a></li> : null }
                     </ul>
                 </nav>
                 <aside>
                     <div class="danhmuc">
                         <h3 class="product">DANH MỤC SẢN PHẨM</h3>
-                        <img src="../image/logotop.png" />
+                        <img src="image/logotop.png" />
                         <div align="justify">
                             <ul style={{ listStyleType: "none" }}>
                                 <li><a href="http://localhost:3000/vanhoc">Văn Học</a></li>
@@ -209,41 +214,67 @@ class SanPhamChiTiet extends React.Component {
                     </div>
                     <div class="menu2" align="center">
                         <h3 class="online">HỖ TRỢ TRỰC TUYẾN</h3>
-                        <img src="../image/logotop.png" />
+                        <img src="image/logotop.png" />
                         <p> Tư vấn 1</p>
-                        <a href="https://www.facebook.com/letrong.tri.1" target="_blank"><img src="../image/20176671.jpg" width="110px"
+                        <a href="https://www.facebook.com/letrong.tri.1" target="_blank"><img src="image/20176671.jpg" width="110px"
                             height="150px" /></a>
                         <p> Điện Thoại : 0334950677</p>
                     </div>
                     <div class="menu2" align="center">
                         <h3 className="online">ĐỊA CHỈ SHOP</h3>
-                        <img src="../image/logotop.png" />
+                        <img src="image/logotop.png" />
 
                         <iframe
                             src="https://maps.google.com/maps?q=ch%C3%B9a%20l%C3%A1ng&t=&z=13&ie=UTF8&iwloc=&output=embed"
                             width="260" height="260" frameborder="0" style={{ border: "0" }} allowfullscreen></iframe>
-                        <img src="../image/log.png" width="260px" />
+                        <img src="image/log.png" width="260px" />
                     </div>
                 </aside>
                 <article>
                     <br />
-                    <table>
-                        <tr>
-                            <th><a><img src={this.state.data.imageUrl} width="280px" height="250px" /></a></th>
-                            <td align="justify" >
-                                <a href="" >{this.state.data.title}</a><br />
-                                <p id="p"><del>{this.state.data.price}</del></p>
-                                <h4>{this.state.data.deductprice}</h4>
-                                <div id="ban">
-                                    <div>
-                                        Số Lượng: <input type="text" size="1" value={this.state.amount} onChange={this.handlePrice}></input>
-                                    </div>
-                                </div>
-                                Đơn Giá:<h4>{this.state.price}</h4>
-                                <button type="button" onClick={this.handleBuy}>Chọn Mua</button>
-                            </td>
-                        </tr>
-                    </table>
+                    <h4 class="card-title mt-3 text-center">Đăng Ký</h4>
+                    <form id="register" onSubmit={this.handleSubmit}>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                            </div>
+                            <input value={this.state.fullName} onChange={this.handleFullName} name="" class="form-control" placeholder="Nhập tên đầy đủ" type="text" id="inputFullName"></input>
+                        </div>
+                        <small id="fullNameHelp" className="form-text text-muted"></small>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                            </div>
+                            <input value={this.state.email} onChange={this.handleEmail} name="" class="form-control" placeholder="Nhập địa chỉ email" type="email" id="inputEmail"></input>
+                        </div>
+                        <small id="emailHelp" className="form-text text-muted"></small>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Chức vụ</label>
+                            <select value={this.state.role} onChange={this.handleOption} class="form-control" id="exampleFormControlSelect1">
+                                <option value="Người Mua">Người Mua</option>
+                                <option value="Người Bán">Người Bán</option>
+                            </select>
+                        </div>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input value={this.state.passWord} onChange={this.handlePassword} class="form-control" placeholder="Nhập Password" type="password" id="inputPassword"></input>
+                        </div>
+                        <small id="passHelp" className="form-text text-muted"></small>
+                        <div class="form-group input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                            </div>
+                            <input value={this.state.repeatPass} onChange={this.handleRepeat} class="form-control" placeholder="Nhập lại Password" type="password" id="inputRepeatPassword"></input>
+                        </div>
+                        <small id="passRepeatHelp" className="form-text text-muted"></small>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-block"> Tạo Tài Khoản  </button>
+                        </div>
+                        <small id="resultHelp" className="form-text text-muted"></small>
+                        <p class="text-center">Đã có tài khoản? <a href="http://localhost:3000/dangnhap">Đăng Nhập</a> </p>
+                    </form>
                 </article>
                 <footer align="center">
                     <br />
@@ -260,4 +291,4 @@ class SanPhamChiTiet extends React.Component {
     }
 }
 
-export default SanPhamChiTiet;
+export default DangKy;

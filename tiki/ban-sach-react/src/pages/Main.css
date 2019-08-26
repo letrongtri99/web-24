@@ -11,7 +11,7 @@ header{
 }
 .login{
     text-align: right;
-    margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 nav>ul>li{
 	display:inline-block;
@@ -193,3 +193,6 @@ td a:hover {
 	color: #F00;
 }
 pre { white-space: pre-wrap; }
+#p{
+	margin:0px;
+}

@@ -1,11 +1,109 @@
-import React from 'react'
+import React from 'react';
 import './Main.css';
 import './GioiThieu.css';
-class NuoiCon extends React.Component {
+class DangHang extends React.Component {
     state = {
-        data: [],
         fullName: '',
-        role: ''
+        role: '',
+        imageSrc: '',
+        title: '',
+        deductPrice: '',
+        price: '',
+        kind: 'văn học',
+        imageFile: undefined,
+        errorMessage: ''
+    }
+    handleTitle = (event) => {
+        this.setState({
+            title: event.target.value,
+        })
+    }
+    handleDeductPrice = (event) => {
+        this.setState({
+            deductPrice: event.target.value
+        })
+    }
+    handlePrice = (event) => {
+        this.setState({
+            price: event.target.value
+        })
+    }
+    handleKind = (event) => {
+        this.setState({
+            kind: event.target.value
+        })
+    }
+    handleChangeFile = (event) => {
+        this.setState({
+            imageSrc: ''
+        })
+        const imageRegex = (/\.(gif|jpg|jpeg|tiff|png)$/i);
+        const imageFile = event.target.files[0];
+        if (!imageRegex.test(imageFile.name)) {
+            document.getElementById("imgHelp").innerHTML = "Not image";
+        }
+        else if (imageFile.size > 400000) {
+            document.getElementById("imgHelp").innerHTML = "Too big";
+        }
+        else {
+            document.getElementById("imgHelp").innerHTML = " ";
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(imageFile);
+            fileReader.onloadend = ((data) => {
+                this.setState({
+                    imageFile: imageFile,
+                    imageSrc: data.currentTarget.result,
+                })
+            });
+        }
+    }
+    handleFormSubmit = (event) => {
+        event.preventDefault();
+        if (this.state.imageFile && this.state.deductPrice && this.state.price && this.state.title) {
+            const formData = new FormData();
+            formData.append('image', this.state.imageFile);
+            fetch(`http://localhost:3001/uploads/image`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                },
+                credentials: 'include',
+                body: formData
+            })
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log(data.data.imageUrl);
+                    fetch(`http://localhost:3001/products/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            imageUrl: data.data.imageUrl,
+                            title: this.state.title,
+                            deductprice: this.state.price,
+                            price: this.state.deductPrice,
+                            kind: this.state.kind
+                        })
+                    })
+                        .then((res) => {
+                            return res.json();
+                        })
+                        .then((data)=>{
+                            console.log(data);
+                            if(data.success){
+                                window.alert('Tạo Mặt Hàng Thành Công');
+                            }
+                        })
+                })
+        }
+        else{
+            window.alert('Failed');
+        }
+
     }
     handleLogOut = (event) => {
         if (this.state.role === 'users') {
@@ -60,22 +158,6 @@ class NuoiCon extends React.Component {
         }
     }
     componentDidMount() {
-        fetch(`http://localhost:3001/products/findNuoiCon`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log(data);
-                this.setState({
-                    data: data.data
-                })
-            })
         const fullName = window.localStorage.getItem('fullName');
         const role = window.localStorage.getItem('role');
         if (fullName && role) {
@@ -163,46 +245,48 @@ class NuoiCon extends React.Component {
                     </div>
                 </aside>
                 <article>
-                    <br />
-                    {this.state.data.map((item) => {
-                        return (
-                            <div class="box">
-                                <a class="a" ><img src={item.imageUrl} width="220px"
-                                    height="200px" /></a><br />
-                                <div align="center">
-                                    <a >{item.title}</a>
-                                </div>
-                                <p><del>{item.price}</del></p>
-                                <h4>{item.deductprice}</h4>
-                                <div align="center">
-                                    <input class="button" type="button" value="Mua hàng" onClick={(event) => {
-                                        if (this.state.role) {
-                                            fetch(`http://localhost:3001/products/findByTitle`, {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                },
-                                                body: JSON.stringify({
-                                                    title: item.title,
-                                                }),
-                                                credentials: 'include',
-
-                                            })
-                                                .then((res) => {
-                                                    return res.json();
-                                                })
-                                                .then((data) => {
-                                                    window.location.assign(`http://localhost:3000/sanpham/${data.id}`);
-                                                })
-                                        }
-                                        else {
-                                            window.alert('Bạn Cần Đăng Nhập Để Thực Hiện Chức Năng Này');
-                                        }
-                                    }} />
-                                </div>
+                    <form onSubmit={this.handleFormSubmit}>
+                        <div className="form-group">
+                            <div >
+                                Chọn ảnh mặt hàng
                             </div>
-                        )
-                    })}
+                            <input type="file" className="form-control" style={{ color: 'transparent', margin: "0 auto", textIndent: "-999em" }} onChange={this.handleChangeFile}></input>
+                            <div id="imgHelp"></div>
+                            {this.state.imageSrc ? (
+                                <div width="50px">
+                                    <img height="200" width="320" src={this.state.imageSrc} alt='preview'></img>
+                                </div>) : null}
+                        </div>
+                        <div className="form-group">
+                            <textarea className="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Nhập Tên Mặt Hàng" value={this.state.title} onChange={this.handleTitle}></textarea>
+                        </div>
+                        <div className="form-group">
+                            <textarea className="form-control" id="exampleFormControlTextarea1" rows="1" placeholder="Nhập Giá Chính Gốc" value={this.state.deductPrice} onChange={this.handleDeductPrice}></textarea>
+                        </div>
+                        <div className="form-group">
+                            <textarea className="form-control" id="exampleFormControlTextarea1" rows="1" placeholder="Nhập Giá Sau Khi Giảm" value={this.state.price} onChange={this.handlePrice}></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Loại Hàng</label>
+                            <select value={this.state.kind} onChange={this.handleKind} class="form-control" id="exampleFormControlSelect1">
+                                <option value="văn học">văn học</option>
+                                <option value="kinh tế">kinh tế</option>
+                                <option value="tâm lí">tâm lí</option>
+                                <option value="nuôi con">nuôi con</option>
+                                <option value="thiếu nhi">thiếu nhi</option>
+                                <option value="tiểu sử">tiểu sử</option>
+                                <option value="ngoại ngữ">ngoại ngữ</option>
+                                <option value="ngoại ngữ">flash sale</option>
+                                <option value="ngoại ngữ">nổi bật</option>
+                            </select>
+                        </div>
+                        <div>
+                            {this.state.errorMessage}
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" className="btn btn-primary" value="Update"></input>
+                        </div>
+                    </form>
                 </article>
                 <footer align="center">
                     <br />
@@ -219,4 +303,4 @@ class NuoiCon extends React.Component {
     }
 }
 
-export default NuoiCon;
+export default DangHang;

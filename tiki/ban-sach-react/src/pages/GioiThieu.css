@@ -84,3 +84,9 @@ form{
 .lh1 {
     color: #ff0000;
 }
+#ban>div{
+    display: inline-block;
+}
+#display{
+    display:inline-block;
+}

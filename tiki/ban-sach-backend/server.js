@@ -5,7 +5,11 @@ const session = require('express-session');
 const cors = require('cors');
 const newsRouter = require('./news/news.router');
 const productsRouter = require('./products/products.router');
-mongoose.connect(`mongodb://localhost:27017/sellbook`,(error)=>{
+const userRouter = require('./users/users.router');
+const adminRouter = require('./admin/admin.router');
+const uploadRouter = require('./uploads/uploads.router');
+const buyRouter = require('./buy/buy.router')
+mongoose.connect(`mongodb://localhost:27017/sellbook`,{useNewUrlParser:true},(error)=>{
     if(error){
         throw error;
     }
@@ -26,6 +30,10 @@ mongoose.connect(`mongodb://localhost:27017/sellbook`,(error)=>{
         app.use(express.static('public'));
         app.use('/news',newsRouter);
         app.use('/products',productsRouter);
+        app.use('/users',userRouter);
+        app.use('/admin',adminRouter);
+        app.use('/uploads',uploadRouter);
+        app.use('/buy',buyRouter);
         //use middleware
 
         app.listen(3001);

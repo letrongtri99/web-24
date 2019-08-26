@@ -1,11 +1,12 @@
 import React from 'react'
 import './Main.css';
 import './GioiThieu.css';
-class NuoiCon extends React.Component {
+class GioHangNguoiMua extends React.Component {
     state = {
         data: [],
         fullName: '',
-        role: ''
+        role: '',
+        email: ''
     }
     handleLogOut = (event) => {
         if (this.state.role === 'users') {
@@ -31,6 +32,7 @@ class NuoiCon extends React.Component {
                             role: ''
                         },
                     });
+                    window.location.assign(`http://localhost:3000`);
                 })
         }
         else if (this.state.role === 'admin') {
@@ -56,49 +58,120 @@ class NuoiCon extends React.Component {
                             role: ''
                         },
                     });
+                    window.location.assign(`http://localhost:3000`);
                 })
         }
     }
     componentDidMount() {
-        fetch(`http://localhost:3001/products/findNuoiCon`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                console.log(data);
-                this.setState({
-                    data: data.data
-                })
-            })
         const fullName = window.localStorage.getItem('fullName');
         const role = window.localStorage.getItem('role');
         if (fullName && role) {
             this.setState({
                 fullName: fullName,
-                role: role
+                role: role,
+                email: window.localStorage.getItem('email')
             })
+            if (window.localStorage.getItem('role') === 'users') {
+                fetch(`http://localhost:3001/buy/findDetail/${window.localStorage.getItem('email')}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        this.setState({
+                            data: data.data
+                        })
+                    })
+            }
+            else {
+                fetch(`http://localhost:3001/buy/findAll`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        this.setState({
+                            data: data.data
+                        })
+                    })
+            }
         }
-        else{
+        else {
             this.setState({
                 fullName: window.sessionStorage.getItem('fullName'),
-                role: window.sessionStorage.getItem('role')
+                role: window.sessionStorage.getItem('role'),
+                email: window.sessionStorage.getItem('email')
             })
+            if (window.sessionStorage.getItem('role') === 'users') {
+                fetch(`http://localhost:3001/buy/findDetail/${window.sessionStorage.getItem('email')}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        console.log(data);
+                        this.setState({
+                            data: data.data
+                        })
+                    })
+            }
+            else {
+                fetch(`http://localhost:3001/buy/findAll`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .then((data) => {
+                        this.setState({
+                            data: data.data
+                        })
+                    })
+            }
         }
     }
+    formatMoney(amount, decimalCount = 3, decimal = ".", thousands = ".") {
+        try {
+            decimalCount = Math.abs(decimalCount);
+            decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
+
+            const negativeSign = amount < 0 ? "-" : "";
+
+            let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(decimalCount)).toString();
+            let j = (i.length > 3) ? i.length % 3 : 0;
+
+            return negativeSign + (j ? i.substr(0, j) + thousands : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) + (decimalCount ? decimal + Math.abs(amount - i).toFixed(decimalCount).slice(2) : "");
+        } catch (e) {
+            console.log(e)
+        }
+    };
     render() {
         return (
             <div id="menu">
                 <header>
                     <div className="login">
                         {
-                            this.state.fullName ? (<div>
-                                <a href="" style={{ marginRight: "2px" }}>Chào Mừng {this.state.fullName}</a>
+                            this.state.fullName ? (<div id="display">
+                                <a href="" style={{ marginRight: "5px" }}>Chào Mừng {this.state.fullName}</a>
                                 <a style={{ marginRight: "2px" }}>Vai Trò: {this.state.role}</a>
                                 <a href="" style={{ marginRight: "2px" }} onClick={this.handleLogOut}>Đăng Xuất</a>
                                 <a href="http://localhost:3000/dangky">Đăng Kí</a>
@@ -125,7 +198,7 @@ class NuoiCon extends React.Component {
                         <li><a href="http://localhost:3000/huongdan">HƯỚNG DẪN MUA HÀNG</a></li>
                         {this.state.role === 'users'? <li><a href="http://localhost:3000/lienhe">LIÊN HỆ</a></li>:null}
                         {this.state.role === 'admin' ? <li><a href="http://localhost:3000/danghang">ĐĂNG HÀNG</a></li> : null}
-                        {this.state.role ? <li><a href="http://localhost:3000/giohang">GIỎ HÀNG</a></li> : null }
+                        {this.state.role ? <li><a href="http://localhost:3000/giohang">GIỎ HÀNG</a></li> : null}
                     </ul>
                 </nav>
                 <aside>
@@ -166,42 +239,19 @@ class NuoiCon extends React.Component {
                     <br />
                     {this.state.data.map((item) => {
                         return (
-                            <div class="box">
-                                <a class="a" ><img src={item.imageUrl} width="220px"
-                                    height="200px" /></a><br />
-                                <div align="center">
-                                    <a >{item.title}</a>
-                                </div>
-                                <p><del>{item.price}</del></p>
-                                <h4>{item.deductprice}</h4>
-                                <div align="center">
-                                    <input class="button" type="button" value="Mua hàng" onClick={(event) => {
-                                        if (this.state.role) {
-                                            fetch(`http://localhost:3001/products/findByTitle`, {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                },
-                                                body: JSON.stringify({
-                                                    title: item.title,
-                                                }),
-                                                credentials: 'include',
-
-                                            })
-                                                .then((res) => {
-                                                    return res.json();
-                                                })
-                                                .then((data) => {
-                                                    window.location.assign(`http://localhost:3000/sanpham/${data.id}`);
-                                                })
-                                        }
-                                        else {
-                                            window.alert('Bạn Cần Đăng Nhập Để Thực Hiện Chức Năng Này');
-                                        }
-                                    }} />
-                                </div>
-                            </div>
+                            <table>
+                                <tr>
+                                    <th><a><img src={item.imageUrl} width="280px" height="250px" /></a></th>
+                                    <td align="justify" >
+                                        <h4 >{item.products}</h4><br />
+                                        {this.state.role === 'admin' ? <h4 >Người mua: {item.fullName}</h4> : null}
+                                        Số Lượng:<h4>{item.amount}</h4>
+                                        Đơn Giá:<h4>{this.formatMoney(item.price)}</h4>
+                                    </td>
+                                </tr>
+                            </table>
                         )
+
                     })}
                 </article>
                 <footer align="center">
@@ -219,4 +269,4 @@ class NuoiCon extends React.Component {
     }
 }
 
-export default NuoiCon;
+export default GioHangNguoiMua;
