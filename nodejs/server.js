@@ -17,10 +17,7 @@
 //         console.log(data);
 //     }
 // });
-// //xem khi nao thay doi
-// fs.watchFile('text.txt',(current,previous) =>{
-//     console.log(`File changed`);
-// })
+
 const express = require(`express`);
 const path = require('path');
 const app = express();
