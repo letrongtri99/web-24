@@ -13,10 +13,7 @@
 //     if(error){
 //         console.log(error);
 //     }
-//     else{
-//         console.log(data);
-//     }
-// });
+
 
 const express = require(`express`);
 const path = require('path');
